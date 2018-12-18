@@ -6,7 +6,7 @@
 
 
     // Tamanho máximo do arquivo (em Bytes)
-    $_UP['tamanho'] = 1024 * 1024 * 2; // 2Mb
+    $_UP['tamanho'] = 1024 * 1024 * 2; // 2Mbyte
  
     // Array com as extensões permitidas
     $_UP['extensoes'] = array('odt','xml','txt', 'odf','doc','zip','docx','pptx');
