@@ -6,39 +6,39 @@
 
 ?>
 
-  <!DOCTYPE html>
-  <html lang = "pt-br">
-    <head>
-        <meta charset = "utf-8">
-        <title>Tratamento de Arquivos</title>
-        <link rel = "icon" href = "imagens/opcoes.ico">
-        <script src = "js/jquery.js"></script>
-        <link rel = "stylesheet" href = "css/bootstrap.css">
-        <link rel = "stylesheet" href = "css/design.css">
-        <link rel = "stylesheet" href = "css/bootstrap.map.css">
-        <script src = "js/bootstrap.js"></script>
-        </script>
-    </head>
-    <body>
+<!DOCTYPE html>
+<html lang = "pt-br">
+  <head>
+      <meta charset = "utf-8">
+      <title>Tratamento de Arquivos</title>
+      <link rel = "icon" href = "imagens/opcoes.ico">
+      <script src = "js/jquery.js"></script>
+      <link rel = "stylesheet" href = "css/bootstrap.css">
+      <link rel = "stylesheet" href = "css/design.css">
+      <link rel = "stylesheet" href = "css/bootstrap.map.css">
+      <script src = "js/bootstrap.js"></script>
+      </script>
+  </head>
+  <body>
     <div class="jumbotron">
-        <br>
-        <br>
-        <br>
-        <div class="container">  
-        <h1>Tratamento de Arquivos&nbsp;&nbsp;&nbsp;<img src="imagens/opcoes.png" class="img-rounded" alt="Cinque Terre" width="80" height="80"> </h1> 
-        </div>
+      <br>
+      <br>
+      <br>
+      <div class="container">  
+      <h1>Tratamento de Arquivos&nbsp;&nbsp;&nbsp;<img src="imagens/opcoes.png" class="img-rounded" alt="Cinque Terre" width="80" height="80"> </h1> 
+      </div>
     </div>
     <div class="container">
-        <h2>Parâmetros presentes no arquivo selecionado</h2></br>
-        </h3>Selecione os parâmentros que deseja modificar</h2></br></br>
-        <form action="manipular.class.php" method="post">
+      <h2>Parâmetros presentes no arquivo selecionado</h2></br>
+      </h3>Selecione os parâmentros que deseja modificar</h2></br></br>
+      <form action="manipular.class.php" method="post">
 
-          <?php foreach($parametros as $var): ?>
-          <input type="checkbox" name="parametros" value="<?php echo $var; ?>">&nbsp;&nbsp;<?php echo $var; ?></input></br>
-          <?php endforeach; ?>
-          </br>
-          <input type="submit" value="OK" class="btn btn-info"/>
-          </form>
+        <?php foreach($parametros as $var): ?>
+        <input type="checkbox" name="parametros" value="<?php echo $var; ?>">&nbsp;&nbsp;<?php echo $var; ?></input></br>
+        <?php endforeach; ?>
+        </br>
+        <input type="submit" value="OK" class="btn btn-info"/>
+      </form>
           <!--
           <h2>Digite a palavra pela qual deseja modificar</h2></br>
           <input type="text" name="string"></br>
