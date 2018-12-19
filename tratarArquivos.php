@@ -1,9 +1,9 @@
 <?php
     require('manipular.class.php');
     $editor = new Editor();
-    $parametros = $editor ->verParametro($_POST['listar']);
-    echo $_POST['listar'];
-    $troca = $editor->trocaParametro($_POST['string']);
+    $parametros = $editor ->verParametro($_GET['arquivo']);
+    //$troca = $editor->trocaParametro($_POST['string']);
+
 ?>
 
 <!DOCTYPE html>
@@ -37,16 +37,19 @@
         <h2>Parâmetros presentes no arquivo selecionado</h2></br>
         </h3>Selecione os parâmentros que deseja modificar</h2></br></br>
         <form action="manipular.class.php" method="post">
+
           <?php foreach($parametros as $var): ?>
           <input type="checkbox" name="parametros" value="<?php echo $var; ?>">&nbsp;&nbsp;<?php echo $var; ?></input></br>
           <?php endforeach; ?>
           <a href="tratarArquivos.php"><button type="button" class="btn btn-info">OK</button></a>
+          </form>
+          <!--
           <h2>Digite a palavra pela qual deseja modificar</h2></br>
           <input type="text" name="string"></br>
           </h3></h3></br></br>
-        </form>
         <a href="index.php"><button type="button" class="btn btn-info">Cancelar</button></a>
         <a href="tratarArquivos.php"><button type="button" class="btn btn-info">Enviar</button></a>
+        -->
     </div>  
   </body>
 </html>

@@ -34,16 +34,18 @@
     <div class="container">
         <h2>Arquivos existentes</h2></br>
         </h3>Esses arquivos já sofreram upload anteriormente, se quiser manipular algum desses arquivos selecione e aperte o botão enviar.</h2></br></br>
-        <form action="tratarArquivos.php" method="post">
+        <form action="upload.php" method="post" enctype="multipart/form-data">
+
           <?php foreach($listar as $var): ?>
           <input type="radio" name="listar" value="<?php echo $var; ?>">&nbsp;&nbsp;<?php echo $var; ?></input></br>
           <?php endforeach; ?>
+
           <h2>Selecione o arquivo para fazer upload</h2></br>
           </h3>Se desejar fazer upload de um novo arquivo, basta slecioná-lo e apertar o botão enviar.</h3></br></br>
           <input type="file" name ="arquivo"></br></br>
-        </form>
-        <a href="index.php"><button type="button" class="btn btn-info">Cancelar</button></a>
-        <a href="tratarArquivos.php"><button type="button" class="btn btn-info">Enviar</button></a>
+          <a href="index.php"><button type="button" class="btn btn-info">Cancelar</button></a>
+          <input type="submit" value="Enviar" class="btn btn-info"/>
+        </form>        
     </div>  
   </body>
 </html>

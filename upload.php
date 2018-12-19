@@ -1,6 +1,7 @@
 <?php
     //Filedata é a variável que o flex envia com o arquivo para upload
     $arquivo = $_FILES['arquivo'];
+    $nome_arquivo = $_FILES['arquivo']['name'];
     // Pasta onde o arquivo vai ser salvo
     $_UP['pasta'] = 'upload';
 
@@ -34,7 +35,7 @@
  
     // Faz a verificação da extensão do arquivo
  
-    $extensao = strtolower(end(explode('.', $_FILES['arquivo']['name'])));
+    $extensao = strtolower(end(explode('.',  $nome_arquivo)));
     //$arquivo = $_FILES['Filedata']['name'];
     //$extensao  = substr($arquivo,-3);
     if (array_search($extensao, $_UP['extensoes']) === false) 
@@ -81,11 +82,11 @@
     //Inserir arquivo no zip
 
     $za = new ZipArchive;
-    $za->open($_UP['pasta'] . '/arquivos.zip');
+    $za->open($_UP['pasta'] . '/arquivos_zip.zip', ZipArchive::CREATE);
     //$za->open($_UP['pasta'] . '/arquivos.zip', ZipArchive::CREATE|ZipArchive::OVERWRITE);
     $za->addFile(realpath($_UP['pasta'] . '/' . $nome_final), $nome_final);
     $za->close();
     
-    //header('Location: manipular.php');
+    header('Location: tratarArquivos.php?arquivo='.$_FILES['arquivo']['name']);
 
 ?>
