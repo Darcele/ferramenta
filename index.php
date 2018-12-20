@@ -1,4 +1,20 @@
 <?php
+    
+     $servername = "localhost";
+     $username = "cefet";
+     $password = "cefet123";
+     
+     try {
+         $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
+         // set the PDO error mode to exception
+         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+         echo "Connected successfully";
+         }
+     catch(PDOException $e)
+         {
+         echo "Connection failed: " . $e->getMessage();
+         } 
+    
     require("manipular.class.php");
     $editor = new Editor();
     $listar = $editor->listarArquivos();
@@ -36,7 +52,9 @@
           <input type="radio" name="listar" value="<?php echo $var; ?>">&nbsp;&nbsp;<?php echo $var; ?></input></br>
           <?php endforeach; ?>
           </br>
-          <!--<a href="tratarArquivos.php"><button type="button" class="btn btn-info">Enviar</button></a>-->
+          <a href="editar.php"><button type="button" class="btn btn-info">Editar</button></a> 
+          <a href="deletar.php"><button type="button" class="btn btn-info">Deletar</button></a>
+
 
           <h2>Selecione o arquivo para fazer upload</h2></br>
           </h3>Se desejar fazer upload de um novo arquivo, basta slecioná-lo e apertar o botão enviar.</h3></br></br>

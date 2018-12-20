@@ -1,0 +1,10 @@
+body{
+    background-image: url("../imagens/fundo.jpg");
+}
+
+.jumbotron{
+    background-image: url("../imagens/cabecalho2.png");
+    background-position-y: -300px;
+    background-position-x: -65px;
+    background-repeat: no-repeat;
+}

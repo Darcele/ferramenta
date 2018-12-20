@@ -29,14 +29,23 @@
       </div>
     </div>
     <div class="container">
-      <h2>Parâmetros presentes no arquivo selecionado</h2></br>
-      </h3>Selecione os parâmentros que deseja modificar</h2></br></br>
+      <h2>Parâmetros presentes no arquivo selecionado</h2>
+      <h4>Desmarque o que não for parâmetro</h4>
       <form action="manipular.class.php" method="post">
 
         <?php foreach($parametros as $var): ?>
-        <input type="checkbox" name="parametros" value="<?php echo $var; ?>">&nbsp;&nbsp;<?php echo $var; ?></input></br>
+        <input type="checkbox" name="parametros" value="<?php echo $var; ?>"checked>&nbsp;&nbsp;<?php echo $var; ?></input></br>
         <?php endforeach; ?>
         </br>
+
+              </br>
+      <h2>Descrição</h2>
+      <h4> Escreva a descrição do documento.</h4>
+        <div class="form-group">
+          <textarea class="form-control" rows="5" id="descricao"></textarea>
+        </div>
+      </br>
+
         <input type="submit" value="OK" class="btn btn-info"/>
       </form>
           <!--
