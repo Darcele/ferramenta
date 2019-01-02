@@ -1,0 +1,71 @@
+﻿Este documento tem a função de explicar o funcionamento do sistema.
+
+Inicial.php:
+
+Essa página tem a função de explicar o funcionamento da ferramenta. Ao apertar o botão começar o usuário é encaminhado para a página index.php.
+Index.php:
+
+Essa página possibilita que o usuário escolha qual arquivo deseja fazer upload. Depois da escolha do arquivo e após clicar o botão enviar, o formulário html encamimha a navegação para outra página web (upload_completo.php).
+
+upload_completo.php
+
+Essa página web tem a função de salvar o arquivo selecionado no sistema de arquivos do servidor. Porém, antes de fazê-lo ela faz verificações sobre o tamanho do arquivo e a sua extensão. Se o arquivo estiver de acordo com esses dois parâmetros, o próximo passo é movê-lo da pasta temporária para salvá-lo em outra pasta(upload), por meio da função move_upload_file().
+
+Se o upload for feito com sucesso aparecerá uma mensagem na tela, caso ocorra algum erro no processo de upload o reespectivo erro será informado através de uma mensagem. 
+
+Uma vez salvo o arquivo, inicia-se o processo de compactação quando o arquivo é adicionado ao arquivo chamado “arquivos.zip”. 
+
+Por fim, a navegação é redirecionada para a página opcao.php. 
+
+opcao.php
+
+Essa página apresenta apenas três links, dando a opção ao usuário de fazer outro upload ou navegar para a página de tratamento dos arquivos xml (tratar_xml.php) ou ir para a página salvar_como.
+
+tratar_xml.php
+
+Nesta página o arquivo zip é aberto e todos os nomes dos arquivos internos com extensão xml são carregados em um array. O conteúdo desse array é apresentado ao usuário em um objeto select de um formulário html.
+
+O usuário então seleciona qual arquivo xml deve ser inspecionado e informa, em um objeto input, qual tag deve ser procurada.
+
+Clicando no botão enviar, a página seguinte é chamada(busca_xml.php).
+
+busca_xml.php
+
+Essa página recebe via POST o nome do arquivo xml a inspecionar e a tag a ser procurada. O arquivo zip é aberto, sendo extraido o conteúdo do arquivo xml escolhido. A tag informada é procurada no conteúdo deste arquivo por meio da função substr_count() e a quantidade de ocorrências é mostrado. 
+
+Além disso, nessa página é perguntado ao usuário se o mesmo pretende modificar todas as tags do arquivo anterior por outra string.
+
+trocar_string
+
+Essa pagina tem a função de substituir a tag que foi contabilizada na página busca_xml por uma string que o usuario digita na pagina busca_xml. 
+
+salvar_como
+
+Nessa página, o usuário escolhe qual arquivo desejar salvar e escolhe qual a extensão para qual ele deseja converter.
+
+Conversao
+
+Essa página tem a função de salvar algum dos arquivos que já sofreram upload e salvá-los com outra extensão. Eles serão salvos em uma pasta dentro de uploads que possui o mesmo nome da extensão salva. 
+
+Criei uma página .css que contém os desing que são utilizados no projeto. Por enquanto ela tem as classes h1 e p, a h1 é responsável pelo desing do "título" da página e a p pelos "subtitulos". O próximo passo é fazer o css dos botões.
+
+Quando eu estiver baixado o bootstrap usarei o código desse link para formatar as opções de como salvar, qual arquivo salvar e qual arquivo xml deseja buscar.
+https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_filters_dropdown&stacked=h
+
+O título ou cabeçalho de todas as páginas estão com esse desing
+https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_jumbotron&stacked=h
+
+Para os erros planejo utilizar esse desing:
+https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_alerts_link&stacked=h
+
+
+O que falta:
+1- conseguir substituir a tag por uma string;
+2- colocar as condições para que determinada função seja executada;
+
+
+
+
+
+
+

@@ -1,0 +1,5 @@
+Essa ferramenta tem a funcçao de fazer uploads de arquivos e inserir no banco de dados, além de permitir que a pessoa modifique algum parâmentro
+para uma palavra. Depois que o arquivo sofre upload, o usuário é encaminhado para a pagina tratarArquivos.php, lá o ususário inserirá a descrição do arquivo,
+e selecionar quais palavras ele relamente coinsidera parâmetros. Quando feito upload automaticamente o arquivo será salvo no banco de dados, na tabela documento. 
+Por conta disso, quando é atualizado a página index.php o arquivo que sofreu upload anteriormente estará lá juntamente com os outros arquivos que já tinham sido "uploadados". 
+O usuário também tem a opção de editar e deletar (do banco de dados) os arquivos da tabela tb_documento. 
