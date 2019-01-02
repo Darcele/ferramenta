@@ -86,6 +86,57 @@
     //$za->open($_UP['pasta'] . '/arquivos.zip', ZipArchive::CREATE|ZipArchive::OVERWRITE);
     $za->addFile(realpath($_UP['pasta'] . '/' . $nome_final), $nome_final);
     $za->close();
+
+    // Parametros de conexao com o banco de dados
+
+    $servername = "localhost";
+    $username = "cefet";
+    $password = "cefet123";
+        
+    // Faz a conexao com o banco de dados
+        
+    try {
+        $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
+        // set the PDO error mode to exception
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        echo "Connected successfully";
+    }
+    catch(PDOException $e)
+    {
+        echo "Connection failed: " . $e->getMessage();
+    } 
+
+    // Prepara o SQL de insert no banco
+
+    $sql = "INSERT INTO tb_arquivo(CAMINHO) VALUES(:caminho)";
+
+    // Prepara o banco de dados carregando o SQL
+
+    $stmt = $PDO->prepare( $sql );
+
+    // Liga o parametro (:caminho) com o valor (realpath($_UP['pasta'] . '/' . $nome_final))
+
+    $stmt->bindParam( ':caminho', realpath($_UP['pasta'] . '/' . $nome_final) );
+    
+    // Executa o SQL inserindo o caminho no banco
+    
+    $result = $stmt->execute();
+    
+    // Verifica o resultado 
+    
+    if ( ! $result )
+    {
+        // Deu erro!!!
+
+        var_dump( $stmt->errorInfo() );
+        exit;
+    }
+
+    // Funcionou! Imprime quantas linhas foram inseridas.
+
+    echo $stmt->rowCount() . "linhas inseridas";
+
+
     
     header('Location: tratarArquivos.php?arquivo='.$_FILES['arquivo']['name']);
 

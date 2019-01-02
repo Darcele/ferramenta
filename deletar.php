@@ -9,7 +9,7 @@
       <link rel = "stylesheet" href = "css/design.css">
       <link rel = "stylesheet" href = "css/bootstrap.map.css">
       <script src = "js/bootstrap.js"></script>
-      </script>
+      <!--</script>-->
   </head>
   <body>
     <div class="jumbotron">
@@ -22,6 +22,7 @@
     </div>
     <div class="container">
       <h2>Tem certeza que deseja deletar esse arquivo?</h2>
+      <!--conseguir colocar no h2 o nome do arquivo-->
         <a href="index.php"><button type="button" class="btn btn-info">Deletar</button></a> 
         <a href="index.php"><button type="button" class="btn btn-info">Cancelar</button></a>
       </form>

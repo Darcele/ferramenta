@@ -9,7 +9,7 @@
       <link rel = "stylesheet" href = "css/design.css">
       <link rel = "stylesheet" href = "css/bootstrap.map.css">
       <script src = "js/bootstrap.js"></script>
-      </script>
+      <!--</script>-->
   </head>
   <body>
     <div class="jumbotron">

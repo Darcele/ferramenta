@@ -43,6 +43,16 @@ class Editor{
         $zip->close();
         return $parametros;
     }
+
+    public function deletarArquivo($arquivo){       
+        $_UP['pasta'] = 'upload';
+        $parametros = array();
+        $zip = new ZipArchive;
+        $zip->open($_UP['pasta'] . '/arquivos_zip.zip');
+        $fileContents = $zip->getFromName($arquivo);
+        
+        $zip->close();
+    }
 /*
 
     public function trocaParametro($string){
