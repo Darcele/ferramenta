@@ -108,7 +108,7 @@
 
     // Prepara o SQL de insert no banco
 
-    $sql = "INSERT INTO tb_arquivo(CAMINHO) VALUES(:caminho)";
+    $sql = "INSERT INTO tb_documento(CAMINHO) VALUES(:caminho)";
 
     // Prepara o banco de dados carregando o SQL
 
@@ -135,7 +135,6 @@
     // Funcionou! Imprime quantas linhas foram inseridas.
 
     echo $stmt->rowCount() . "linhas inseridas";
-
 
     
     header('Location: tratarArquivos.php?arquivo='.$_FILES['arquivo']['name']);
