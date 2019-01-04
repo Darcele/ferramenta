@@ -1,3 +1,22 @@
+<?php
+
+   $servername = "localhost";
+   $username = "cefet";
+   $password = "cefet123";
+       
+   // Faz a conexao com o banco de dados
+       
+   try {
+       $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
+       $conn->exec('SET NAMES utf8');
+   }
+   catch(PDOException $e)
+   {
+       exit ("Connection failed: " . $e->getMessage());
+   }
+
+?>
+
 <!DOCTYPE html>
 <html lang = "pt-br">
   <head>
@@ -21,26 +40,12 @@
       </div>
     </div>
     <div class="container">
-        <h2>Tem certeza que deseja deletar esse arquivo?</h2>
-        <!--conseguir colocar no h2 o nome do arquivo-->
-        <?php
-          $servername = "localhost";
-          $username = "cefet";
-          $password = "cefet123";
-              
-          // Faz a conexao com o banco de dados
-              
-          try {
-              $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
-          }
-          catch(PDOException $e)
-          {
-              exit ("Connection failed: " . $e->getMessage());
-          } 
-      ?>
+        
+        <h2>Tem certeza que deseja deletar o arquivo?</h2>
+        <!--conseguir colocar no h2 o nome do arquivo-->      
 
-        <a href="index.php"><button type="button" class="btn btn-info">Deletar</button></a> 
-        <a href="index.php"><button type="button" class="btn btn-info">Cancelar</button></a>
+        <a href="excluir.php"><button type="button" class="btn btn-info">Deletar</button></a>
+        <a href="lista.php"><button type="button" class="btn btn-info">Cancelar</button></a>
       </form>
     </div>  
   </body>

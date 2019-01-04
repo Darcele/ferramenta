@@ -15,23 +15,44 @@
        exit ("Connection failed: " . $e->getMessage());
    } 
 ?>
-<html>
+
+
+<!DOCTYPE html>
     <head>
+        <meta charset = "utf-8">
+        <title>Upload</title>
+        <link rel = "icon" href = "imagens/upload.ico">
+        <script src = "js/jquery.js"></script>
+        <link rel = "stylesheet" href = "css/bootstrap.css">
+        <link rel = "stylesheet" href = "css/design.css">
+        <link rel = "stylesheet" href = "css/bootstrap.map.css">
+        <script src = "js/bootstrap.js"></script>
+        </script>
        <title>Documentos</title>
     </head>
     <body>
-       <table border="1">
+    <div class="jumbotron">
+        <br>
+        <br>
+        <br>
+        <div class="container">  
+        <h1>Upload de arquivos&nbsp;&nbsp;&nbsp;<img src="imagens/upload.png" class="img-rounded" alt="Cinque Terre" width="80" height="80"> </h1> 
+        </div>
+    </div>
+    <div class="container">
+       <!--<table border="1">-->
+    <table class="table table-striped">
       <tr>
           <td>Nome</td>
           <td>Caminho do arquivo</td>
-          <td colspan="2">Comandos</td>
+          <td colspan="2" align="center">Comandos</td>
        </tr>
 <?php foreach ($conn->query("SELECT * FROM tb_documento", PDO::FETCH_ASSOC) as $linha): ?>
       <tr>
           <td><?=$linha['nome']?></td>
           <td><?=$linha['caminho']?></td>
           <td><a href="editar.php?id=<?=$linha['id']?>">Editar</a></td>
-          <td><a href="testar.php?id=<?=$linha['id']?>">testar</a></td>
+          <td><a href="deletar.php?id=<?=$linha['id']?>">Deletar</a></td>
        </tr>
 <?php endforeach; ?>
        <tr>
@@ -39,6 +60,7 @@
             <td colspan="2" align="right">Novo documento:</td>
             <td>
                  <input type="file" name="doc" />
+
             </td>
             <td>
                  <input type="submit" name="Enviar" />
@@ -46,5 +68,6 @@
           </form>
        </tr>
        </table>
+       </div>
     </body>
 </html>
