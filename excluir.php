@@ -9,23 +9,23 @@
     try {
         $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
         $conn->exec('SET NAMES utf8');
+
+        $stmt = $conn->prepare('DELETE FROM tb_documento WHERE id = :id');
+        $stmt->bindParam(':id', $_GET['id']);  
+        $stmt->execute();
+
+        //echo $stmt->rowCount();
+
     }
     catch(PDOException $e)
     {
-        exit ("Connection failed: " . $e->getMessage());
+        exit ("Error: " . $e->getMessage());
     }
-
-
-    function deletar(){
-            $sql = "DELETE * FROM tb_documento WHERE id = :id";
-            $stmt->bindParam( ':id', $_GET['id']);
-            $conn->query($sql, PDO::FETCH_ASSOC);
-    }
-
+    
     header('Location:lista.php');
 ?>
 
-/*
+<!--
 
           function deletar(){
           $sql = "DELETE * FROM tb_documento WHERE id = (:id)";
@@ -36,4 +36,4 @@
           $conn->query($sql, PDO::FETCH_ASSOC);
           }
 
-*/
+-->

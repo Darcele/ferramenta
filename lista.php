@@ -1,5 +1,7 @@
 <?php
 
+    //phpinfo();
+
    $servername = "localhost";
    $username = "cefet";
    $password = "cefet123";

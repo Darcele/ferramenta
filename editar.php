@@ -1,3 +1,32 @@
+<?php
+
+    $servername = "localhost";
+    $username = "cefet";
+    $password = "cefet123";
+        
+    // Faz a conexao com o banco de dados
+        
+    try {
+        $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
+        $conn->exec('SET NAMES utf8');
+
+
+        $consulta = $conn->query('SELECT * FROM tb_documento WHERE id = ' . $_GET['id']);
+   
+        while ($linha = $consulta->fetch(PDO::FETCH_ASSOC)) 
+        {
+            $NOME = $linha['nome'];
+            $CAMINHO = $linha['caminho'];
+        }
+
+    }
+    catch(PDOException $e)
+    {
+        exit ("Error: " . $e->getMessage());
+    }
+  
+?>
+
 <!DOCTYPE html>
 <html lang = "pt-br">
   <head>
@@ -22,26 +51,15 @@
     </div>
     <div class="container">
     <h3>Após alterar as informações aperte salvar para salvá-las ou cancelar para desfazê-las.</h3></br>
-      
-
-      <?php
-        $sql = "SELECT * FROM tb_documento WHERE id = :id";
-        $stmt->bindParam( ':id', $_GET['id']);
-        $conn->query($sql, PDO::FETCH_ASSOC);
-      ?>
-
+  
       <h2>Parâmetros</h2>
       <h4>Desmarque os parâmetros que não serão mais considerados parâmetros.<h4>
       <form action="manipular.class.php" method="post">
-
-        <?php //foreach($parametros as $var): ?>
-        <!--<input type="checkbox" name="parametros" value="<?php //echo $var; ?>">&nbsp;&nbsp;<?php //echo $var; ?></input></br>-->
-        <?php //endforeach; ?>
       </br>
       <h2>Descrição</h2>
       <h4> Edite a descrição do documento.</h4>
         <div class="form-group">
-          <textarea class="form-control" rows="5" id="descricao"><?=$linha['caminho']?></textarea>
+          <textarea class="form-control" rows="5" id="descricao"><?=$NOME?></textarea>
         </div>
       </br>
         <input type="submit" value="Salvar" class="btn btn-info"/>
