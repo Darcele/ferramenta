@@ -11,12 +11,17 @@
         $conn->exec('SET NAMES utf8');
 
 
-        $consulta = $conn->query('SELECT * FROM tb_documento WHERE id = ' . $_GET['id']);
-   
+        $consulta = $conn->query('SELECT tb_documento.nome AS descricao , tb_parametro.nome AS parametro 
+                FROM tb_parametro INNER JOIN tb_documento 
+                ON tb_parametro.id_doc = tb_documento.id WHERE tb_documento.id = ' . $_GET['id']);
+       
+        //'SELECT * FROM tb_documento WHERE id = ' . $_GET['id']
+        
         while ($linha = $consulta->fetch(PDO::FETCH_ASSOC)) 
         {
-            $NOME = $linha['nome'];
-            $CAMINHO = $linha['caminho'];
+            $DESCRICAO = $linha['descricao'];
+            $PARAMETRO = $linha['parametro'];
+            //$NOME = $linha['nome'];
         }
 
     }
@@ -54,17 +59,27 @@
   
       <h2>Parâmetros</h2>
       <h4>Desmarque os parâmetros que não serão mais considerados parâmetros.<h4>
-      <form action="manipular.class.php" method="post">
+
+      <!--<form method="submit" action="modificar.php">-->
+
+      <form action="/modificar.php?id=<?=$_GET['id']?>">
+
+      <?php foreach($parametro as $var):?>
+      <input type="checkbox" name="nome" value="$PARAMETRO" checked><?=$PARAMETRO?></br>
+      <?php endforeach; ?>
+
+      <input type="checkbox" name="nome" value="parametro" checked><?=$PARAMETRO?>
+    
       </br>
       <h2>Descrição</h2>
       <h4> Edite a descrição do documento.</h4>
         <div class="form-group">
-          <textarea class="form-control" rows="5" id="descricao"><?=$NOME?></textarea>
+          <textarea class="form-control" rows="5" id="descricao"><?=$DESCRICAO?></textarea>
         </div>
       </br>
-        <input type="submit" value="Salvar" class="btn btn-info"/>
-        <a href="editar.php"><button type="button" class="btn btn-info">Cancelar</button></a>
-      </form>
+        <a href="modificar.php?id=<?=$_GET['id']?>"><input type="submit" value="Salvar" class="btn btn-info"/>
+        <a href="lista.php"><button type="button" class="btn btn-info">Cancelar</button></a>
+    
     </div>  
   </body>
 </html>
