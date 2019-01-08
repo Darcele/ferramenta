@@ -58,14 +58,14 @@
        </tr>
 <?php endforeach; ?>
        <tr>
-         <form  method="post" enctype="multipart/form-data">
+         <form  action="criar.php" method="post" enctype="multipart/form-data">
             <td colspan="2" align="right">Novo documento:</td>
             <td>
                  <input type="file" name="doc" />
 
             </td>
             <td>
-                 <input type="submit" name="Enviar" />
+                 <input type="submit" name="Enviar" value="criar"/>
             </td>
           </form>
        </tr>
