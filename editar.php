@@ -11,16 +11,20 @@
         $conn->exec('SET NAMES utf8');
 
 
-        $consulta = $conn->query('SELECT tb_documento.nome AS descricao , tb_parametro.nome AS parametro 
-                FROM tb_parametro INNER JOIN tb_documento 
-                ON tb_parametro.id_doc = tb_documento.id WHERE tb_documento.id = ' . $_GET['id']);
-       
+        $sql = 'SELECT tb_documento.nome AS descricao , tb_parametro.nome AS parametro 
+        FROM tb_parametro INNER JOIN tb_documento 
+        ON tb_parametro.id_doc = tb_documento.id WHERE tb_documento.id = ' . $_GET['id'];
+
+        $consulta = $conn->query($sql);
+        //echo $sql;
+
         //'SELECT * FROM tb_documento WHERE id = ' . $_GET['id']
         
-        while ($linha = $consulta->fetch(PDO::FETCH_ASSOC)) 
-        {
-            $DESCRICAO = $linha['descricao'];        
-        }
+        //while ($linha = $consulta->fetch(PDO::FETCH_ASSOC)) 
+        //{
+        //    $DESCRICAO = $linha['descricao'];
+            //echo $linha['descricao'];        
+        //}
 
     }
     catch(PDOException $e)
@@ -52,6 +56,7 @@
       <h1>Editor de Arquivos&nbsp;&nbsp;&nbsp;<img src="imagens/editor.jpg" class="img-rounded" alt="Cinque Terre" width="80" height="80"> </h1> 
       </div>
     </div>
+
     <div class="container">
     <h3>Após alterar as informações aperte salvar para salvá-las ou cancelar para desfazê-las.</h3></br>
   
@@ -62,9 +67,18 @@
 
       <form action="/modificar.php?id=<?=$_GET['id']?>" method="get" enctype="multipart/form-data">
 
-      <?php foreach($consulta->fetch(PDO::FETCH_ASSOC) as $linha):?>
-      <input type="checkbox" name="parametro[]" value="<?$linha['parametro']?>" checked><?=$linha['parametro']?></br>
-      <?php endforeach; ?>
+      <?php 
+      while ($linha = $consulta->fetch()) 
+      {
+        $DESCRICAO = $linha['descricao'];
+        ?>
+
+      <input type="checkbox" name="parametro[]" value="<?=$linha['parametro']?>" checked><?=$linha['parametro']?></br>
+
+
+        <?php 
+      }
+    ?>
     
       </br>
       <h2>Descrição</h2>
