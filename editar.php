@@ -10,23 +10,17 @@
         $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
         $conn->exec('SET NAMES utf8');
 
+        $sql = 'SELECT documento.id AS id, documento.nome AS descricao , parametro.nome AS parametro, parametro.padrao AS padrao, parametro.id AS id_par
+        FROM parametro INNER JOIN documento 
+        ON parametro.doc = documento.id WHERE documento.id = ' . $_GET['id'];
 
-        $sql = 'SELECT tb_documento.nome AS descricao , tb_parametro.nome AS parametro 
-        FROM tb_parametro INNER JOIN tb_documento 
-        ON tb_parametro.id_doc = tb_documento.id WHERE tb_documento.id = ' . $_GET['id'];
+//        echo $sql;
 
-        $consulta = $conn->query($sql);
-        //echo $sql;
+        //echo $_GET['id'];
 
-        //'SELECT * FROM tb_documento WHERE id = ' . $_GET['id']
         
-        //while ($linha = $consulta->fetch(PDO::FETCH_ASSOC)) 
-        //{
-        //    $DESCRICAO = $linha['descricao'];
-            //echo $linha['descricao'];        
-        //}
-
-    }
+        $consulta = $conn->query($sql);
+      }
     catch(PDOException $e)
     {
         exit ("Error: " . $e->getMessage());
@@ -45,7 +39,6 @@
       <link rel = "stylesheet" href = "css/design.css">
       <link rel = "stylesheet" href = "css/bootstrap.map.css">
       <script src = "js/bootstrap.js"></script>
-      <!--</script>-->
   </head>
   <body>
     <div class="jumbotron">
@@ -58,38 +51,37 @@
     </div>
 
     <div class="container">
-    <h3>Após alterar as informações aperte salvar para salvá-las ou cancelar para desfazê-las.</h3></br>
+      <h3>Após alterar as informações aperte salvar para salvá-las ou cancelar para desfazê-las.</h3><br>
   
       <h2>Parâmetros</h2>
-      <h4>Desmarque os parâmetros que não serão mais considerados parâmetros.<h4>
+      <h4>Escreva o valor padrão para os parâmetros.</h4>
 
-      <!--<form method="submit" action="modificar.php">-->
-
-      <form action="/modificar.php?id=<?=$_GET['id']?>" method="get" enctype="multipart/form-data">
-
-      <?php 
-      while ($linha = $consulta->fetch()) 
-      {
-        $DESCRICAO = $linha['descricao'];
-        ?>
-
-      <input type="checkbox" name="parametro[]" value="<?=$linha['parametro']?>" checked><?=$linha['parametro']?></br>
-
-
+      <form action="/modificar.php" method="get" >
         <?php 
-      }
-    ?>
-    
-      </br>
-      <h2>Descrição</h2>
-      <h4> Edite a descrição do documento.</h4>
+        while ($linha = $consulta->fetch()) 
+        {
+          $DESCRICAO = $linha['descricao'];
+          $PARAMETRO = $linha['parametro'];
+          $PADRAO = $linha['padrao'];
+              
+        ?>
+            <?=$PARAMETRO?>:&nbsp;<input type="text" name="padrao[]" value="<?=$PADRAO?>"><br><br>
+     
+      <?php 
+        }
+      ?>
+        <input type="hidden" name="id" value="<?=$_GET['id']?>">
+        <?php //print_r($_GET['id']);?>
+        <br>
+        <h2>Descrição</h2>
+        <h4> Edite a descrição do documento.</h4>
         <div class="form-group">
-          <textarea class="form-control" rows="5" name="descricao"><?=$DESCRICAO?></textarea>
+           <textarea class="form-control" rows="5" name="descricao"><?=$DESCRICAO?></textarea>
         </div>
-      </br>
+        <br>
         <input type="submit" value="Salvar" class="btn btn-info"/>
-        <a href="lista.php"><button type="button" class="btn btn-info">Cancelar</button></a>
-    </div>  
-    </form>
+        <a href="lista.php"><button type="button" class="btn btn-info">Cancelar</button></a>  
+      </form>
+    </div>
   </body>
 </html>
