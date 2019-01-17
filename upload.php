@@ -1,3 +1,31 @@
+1 de 1.478
+Páginas editar.php e modificar.php
+Darcele Christo Leão <darcele.leao@gmail.com>
+	
+Anexos14:07 (Há 8 horas)
+	
+para eu
+
+2 anexos
+Darcele Christo Leão <darcele.leao@gmail.com>
+	
+Anexos14:13 (Há 7 horas)
+	
+para eu
+O que falta fazer para testar o funcionamento do processo de upload de um novo arquivo é conferir a linha 59 da página criar.php e terminar o código da página novo.php.
+
+Segue em anexo as páginas upload.php, criar.php, parametro.php, excluir.php e novo.php.
+
+
+
+Em qua, 16 de jan de 2019 às 14:07, Darcele Christo Leão <darcele.leao@gmail.com> escreveu:
+
+
+5 anexos
+	
+	
+	
+
 <?php
     //Filedata é a variável que o flex envia com o arquivo para upload
     $arquivo = $_FILES['arquivo'];
@@ -108,7 +136,7 @@
 
     // Prepara o SQL de insert no banco
 
-    $sql = "INSERT INTO tb_documento(CAMINHO) VALUES(:caminho)";
+    $sql = "INSERT INTO tb_documento(caminho, nome) VALUES(:caminho, :nome)";
 
     // Prepara o banco de dados carregando o SQL
 
@@ -116,7 +144,11 @@
 
     // Liga o parametro (:caminho) com o valor (realpath($_UP['pasta'] . '/' . $nome_final))
 
-    $stmt->bindParam( ':caminho', realpath($_UP['pasta'] . '/' . $nome_final) );
+    $stmt->bindParam(':caminho', realpath($_UP['pasta'] . '/' . $nome_final));
+
+    // Liga o parametro (:nome) com o valor ($nome_final)
+
+    $stmt->bindParam(':nome', $nome_final);
     
     // Executa o SQL inserindo o caminho no banco
     
@@ -137,6 +169,6 @@
     echo $stmt->rowCount() . "linhas inseridas";
 
     
-    header('Location: tratarArquivos.php?arquivo='.$_FILES['arquivo']['name']);
+    header('Location: parametro.php?arquivo='.$_FILES['arquivo']['name']);
 
 ?>

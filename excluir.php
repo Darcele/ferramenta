@@ -10,9 +10,14 @@
         $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
         $conn->exec('SET NAMES utf8');
 
-        $stmt = $conn->prepare('DELETE FROM tb_documento WHERE id = :id');
+        $stmt = $conn->prepare('DELETE FROM parametro WHERE doc = :id');
         $stmt->bindParam(':id', $_GET['id']);  
         $stmt->execute();
+
+        $stmt1 = $conn->prepare('DELETE FROM documento WHERE id = :id');
+        $stmt1->bindParam(':id', $_GET['id']);  
+        $stmt1->execute();
+
 
         //echo $stmt->rowCount();
 
@@ -25,15 +30,3 @@
     header('Location:lista.php');
 ?>
 
-<!--
-
-          function deletar(){
-          $sql = "DELETE * FROM tb_documento WHERE id = (:id)";
-          $string = realpath($PHP_SELF);
-          $separa = explode('=', $string);
-          $id = array_pop($separa);
-          $stmt->bindParam( ':id', realpath($id));
-          $conn->query($sql, PDO::FETCH_ASSOC);
-          }
-
--->

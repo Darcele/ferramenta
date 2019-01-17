@@ -1,5 +1,4 @@
 <?php
-
     $servername = "localhost";
     $username = "cefet";
     $password = "cefet123";
@@ -9,15 +8,11 @@
     try {
         $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
         $conn->exec('SET NAMES utf8');
-
         $sql = 'SELECT documento.id AS id, documento.nome AS descricao , parametro.nome AS parametro, parametro.padrao AS padrao, parametro.id AS id_par
         FROM parametro INNER JOIN documento 
         ON parametro.doc = documento.id WHERE documento.id = ' . $_GET['id'];
-
 //        echo $sql;
-
         //echo $_GET['id'];
-
         
         $consulta = $conn->query($sql);
       }
@@ -63,13 +58,15 @@
           $DESCRICAO = $linha['descricao'];
           $PARAMETRO = $linha['parametro'];
           $PADRAO = $linha['padrao'];
+          $id_par = $linha['id_par'];
               
         ?>
-            <?=$PARAMETRO?>:&nbsp;<input type="text" name="padrao[]" value="<?=$PADRAO?>"><br><br>
+            <?=$PARAMETRO?>:&nbsp;<input type="text" name="padrao_<?=$id_par?>" value="<?=$PADRAO?>"><br><br>
      
       <?php 
         }
       ?>
+        <input type="hidden" name="parametro" value="<?=$PARAMETRO?>">
         <input type="hidden" name="id" value="<?=$_GET['id']?>">
         <?php //print_r($_GET['id']);?>
         <br>

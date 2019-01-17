@@ -10,27 +10,18 @@
         $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
         $conn->exec('SET NAMES utf8');
 
-/*
-        $consulta = $conn->query('SELECT tb_documento.nome AS descricao , tb_parametro.nome AS parametro 
-                FROM tb_parametro INNER JOIN tb_documento 
-                ON tb_parametro.id_doc = tb_documento.id WHERE tb_documento.id = ' . $_GET['id']);
-       
-        //'SELECT * FROM tb_documento WHERE id = ' . $_GET['id']
-        
-        while ($linha = $consulta->fetch(PDO::FETCH_ASSOC)) 
-        {
-            $DESCRICAO = $linha['descricao'];
-            //$PARAMETRO = $linha['parametro'];
-            //$NOME = $linha['nome'];
-        }
-*/
+
+        $sql = 'SELECT documento.id AS id, documento.nome AS descricao , parametro.nome AS parametro 
+        FROM parametro INNER JOIN documento 
+        ON parametro.doc = documento.id WHERE documento.id = :id';
+        $consulta = $conn->query($sql);
+
 
     }
     catch(PDOException $e)
     {
         exit ("Error: " . $e->getMessage());
     }
-    
   
 ?>
 
@@ -45,7 +36,6 @@
       <link rel = "stylesheet" href = "css/design.css">
       <link rel = "stylesheet" href = "css/bootstrap.map.css">
       <script src = "js/bootstrap.js"></script>
-      <!--</script>-->
   </head>
   <body>
     <div class="jumbotron">
@@ -60,22 +50,35 @@
     <h3>Após alterar as informações aperte salvar para salvá-las ou cancelar para desfazê-las.</h3></br>
   
       <h2>Parâmetros</h2>
-      <h4>Desmarque os parâmetros que não serão mais considerados parâmetros.<h4>
+      <h4>Marque os parâmetros que deseja desconsiderar como parâmetros.<h4>
 
-      <?php foreach($consulta->fetch(PDO::FETCH_ASSOC) as $linha):?>
-      <input type="checkbox" name="parametro[]" value="<?$linha['parametro']?>" checked><?=$linha['parametro']?></br>
-      <?php endforeach; ?>
+      <form action="/novo.php" method="get">
+      
+      <?php
+    
+      while ($linha = $consulta->fetch()) 
+      {
+        $id = $linha['id'];
+    
+      ?>
+      
+      <input type="checkbox" name="parametro[]" value="<?=$linha['parametro']?>"><?=$linha['parametro']?><br>
 
-      <form action="/upload.php?id=<?=$_GET['id']?>" method="post" enctype="multipart/form-data">
-      </br>
+
+        <?php 
+      }
+    ?>
+      
+      <br>
       <h2>Descrição</h2>
       <h4> Insira a descrição do documento.</h4>
         <div class="form-group">
-          <textarea class="form-control" rows="5" id="1" name="descricao"><?=$DESCRICAO?></textarea>
+          <textarea class="form-control" rows="5" name="descricao"><?=$DESCRICAO?></textarea>
+          <!--<textarea class="form-control" rows="5" name="descricao" value=""><?//=$DESCRICAO?></textarea>-->
         </div>
-      </br>
+      <br>
         <input type="submit" value="Salvar" class="btn btn-info"/>
-        <a href="lista.php"><button type="button" class="btn btn-info">Cancelar</button></a>
+        <a href="excluir.php"><button type="button" class="btn btn-info">Cancelar</button></a>
     </div>  
     </form>
   </body>
