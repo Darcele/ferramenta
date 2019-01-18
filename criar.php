@@ -52,7 +52,7 @@
       <h2>Parâmetros</h2>
       <h4>Marque os parâmetros que deseja desconsiderar como parâmetros.<h4>
 
-      <form action="/novo.php" method="get">
+      <form action="/parametro.php" method="get">
       
       <?php
     

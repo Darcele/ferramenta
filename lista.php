@@ -58,7 +58,7 @@
        </tr>
 <?php endforeach; ?>
        <tr>
-         <form  action="criar.php" method="post" enctype="multipart/form-data">
+         <form  action="upload_1.php" method="post" enctype="multipart/form-data">
             <td colspan="2" align="right">Novo documento:</td>
             <td>
                  <input type="file" name="doc" />
