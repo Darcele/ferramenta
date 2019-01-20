@@ -40,7 +40,6 @@
     {
         exit ("Error: " . $e->getMessage());
     }
-    
-  
+
     //header('Location:lista.php');
 ?>
