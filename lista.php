@@ -29,7 +29,6 @@
         <link rel = "stylesheet" href = "css/design.css">
         <link rel = "stylesheet" href = "css/bootstrap.map.css">
         <script src = "js/bootstrap.js"></script>
-        </script>
        <title>Documentos</title>
     </head>
     <body>
@@ -49,7 +48,7 @@
           <td>Caminho do arquivo</td>
           <td colspan="2" align="center">Comandos</td>
        </tr>
-<?php foreach ($conn->query("SELECT * FROM tb_documento", PDO::FETCH_ASSOC) as $linha): ?>
+<?php foreach ($conn->query("SELECT * FROM documento", PDO::FETCH_ASSOC) as $linha): ?>
       <tr>
           <td><?=$linha['nome']?></td>
           <td><?=$linha['caminho']?></td>

@@ -11,9 +11,9 @@
         $conn->exec('SET NAMES utf8');
 
 
-        $sql = 'SELECT documento.id AS id, documento.nome AS descricao , parametro.nome AS parametro 
-        FROM parametro INNER JOIN documento 
-        ON parametro.doc = documento.id WHERE documento.id = :id';
+        $sql = 'SELECT documento.nome AS descricao , parametro.nome AS parametro, 
+        parametro.id AS id_param FROM parametro INNER JOIN documento 
+        ON parametro.doc = documento.id WHERE documento.id =' . $_GET['id'];
         $consulta = $conn->query($sql);
 
 
@@ -50,19 +50,21 @@
     <h3>Após alterar as informações aperte salvar para salvá-las ou cancelar para desfazê-las.</h3></br>
   
       <h2>Parâmetros</h2>
-      <h4>Marque os parâmetros que deseja desconsiderar como parâmetros.<h4>
+      <h4>Mantenha marcado somente oque deseja considerar.<h4>
 
-      <form action="/parametro.php" method="get">
+      <form action="novo.php" method="post">
       
       <?php
     
       while ($linha = $consulta->fetch()) 
       {
-        $id = $linha['id'];
+        $descricao = $linha['descricao'];
+        $id_param = $linha['id_param'];
+        $parametro = $linha['parametro'];
     
       ?>
       
-      <input type="checkbox" name="parametro[]" value="<?=$linha['parametro']?>"><?=$linha['parametro']?><br>
+      <input type="checkbox" name="parametro[]" value="<?=$id_param?>" checked><?=$parametro?><br>
 
 
         <?php 
@@ -73,12 +75,12 @@
       <h2>Descrição</h2>
       <h4> Insira a descrição do documento.</h4>
         <div class="form-group">
-          <textarea class="form-control" rows="5" name="descricao"><?=$DESCRICAO?></textarea>
-          <!--<textarea class="form-control" rows="5" name="descricao" value=""><?//=$DESCRICAO?></textarea>-->
+          <textarea class="form-control" rows="5" name="descricao"><?=$descricao?></textarea>
         </div>
       <br>
+        <input type="hidden" name="id" value="<?=$_GET['id']?>">
         <input type="submit" value="Salvar" class="btn btn-info"/>
-        <a href="excluir.php"><button type="button" class="btn btn-info">Cancelar</button></a>
+        <a href="lista.php"><button type="button" class="btn btn-info">Cancelar</button></a>
     </div>  
     </form>
   </body>

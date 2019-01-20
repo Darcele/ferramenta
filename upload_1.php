@@ -1,7 +1,6 @@
 <?php
     //Filedata é a variável que o flex envia com o arquivo para upload
     $doc = $_FILES['doc'];
-    $nome_doc = $_FILES['doc']['name'];
     
     // Pasta onde o arquivo vai ser salvo
     $_UP['pasta'] = 'upload';
@@ -58,55 +57,65 @@
     $username = "cefet";
     $password = "cefet123";
         
-    try {
+    try 
+    {
         $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
-        //$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        echo "Connected successfully";
-        
-        $sql = "INSERT INTO documento(caminho, nome) VALUES(:caminho, :nome)";
-        $stmt = $conn->prepare( $sql );
-        $caminho = realpath($_UP['pasta'] . '/' . $nome_final);
-        $stmt->bindParam(':caminho', $caminho);
-        $stmt->bindParam(':nome', $nome_final);
-        $result = $stmt->execute();
-
-        if($result == TRUE)
-        {
-            echo 'OK!';
-        }
-
-        else
-        {
-            echo 'NO';    
-            var_dump( $stmt->errorInfo() );
-            exit;    
-        }
-        
-        //echo $stmt->rowCount() . "linhas inseridas";
-        echo $nome_final;
-        echo $sql;
-        echo $caminho;
-
-        
-        $sql1 = 'SELECT id FROM documento WHERE nome = :nome';
-        echo $sql1;
-        
-        $stmt1 = $conn->prepare( $sql1 );
-        $stm1->bindParam(':nome', $nome_final);
-        $stm1->execute();
-
-        echo 'id';
-    
-
     }
-
     catch(PDOException $e)
     {
         echo "Connection failed: " . $e->getMessage();
+        exit;
     } 
     
+    // Insere o documento no banco e dados
+
+    $sql = "INSERT INTO documento(caminho, nome) VALUES(:caminho, :nome)";
+    $stmt = $conn->prepare( $sql );
+    $caminho = realpath($_UP['pasta'] . '/' . $nome_final);
+    $stmt->bindParam(':caminho', $caminho);
+    $stmt->bindParam(':nome', $nome_final);
+    $result = $stmt->execute();
+
+    if($result == FALSE)
+    {
+        echo 'NO';    
+        var_dump( $stmt->errorInfo() );
+        exit;    
+    }
+
+    $insertid = $conn->lastInsertId();
+
+    // Obtem os parametros do arquivo
+
+    $fileContents = file_get_contents($caminho);
+
+    if ($fileContents === false) 
+    {
+        echo 'Erro ao ler o arquivo!';
+    }
+    $parametros = array();
+    $palavras = str_word_count($fileContents,1, "{}");
+    foreach($palavras as $palavra)
+    {
+        if(preg_match('/{{([^}]*)}}/', $palavra, $matches))
+        {
+            array_unshift($parametros, $matches[1]);
+        }
+    }
+
+
+    $sql1 = "INSERT INTO parametro(nome, doc) VALUES(:nome, :id)";
+    $stmt1 = $conn->prepare( $sql1 );
+
     
-    header('Location: parametro.php?doc='.$_FILES['doc']['name']['id']);
+    foreach($parametros as $item)
+    {
+        $stmt1->bindParam(':id', $insertid);
+        $stmt1->bindParam(':nome', $item);
+        $stmt1->execute();
+    }
+
+    header("Location: criar.php?id=$insertid");
 
 ?>
 

@@ -11,18 +11,30 @@
         $conn->exec('SET NAMES utf8');
 
         $sql = 'UPDATE documento SET nome = :nome WHERE id = :id';
-        $sql1 = 'DELETE FROM parametro WHERE nome = :nome';
         
-        //foreach()
-            $stm = $conn->prepare($sql);
-            $stm->bindParam(':nome', $_GET['descricao']);
-            $stm->bindParam(':id', $_GET['id']);
-            $stm->execute();
-            
-        $stm1 = $conn->prepare($sql1);
-        $stm1->bindParam(':nome', $_GET['parametro[]']);
-        $stm1->execute();
+        
+        $stm = $conn->prepare($sql);
+        $stm->bindParam(':nome', $_POST['descricao']);
+        $stm->bindParam(':id', $_POST['id']);
+        $stm->execute();
 
+        
+        if (isset($_POST['parametro']))
+        {
+            $sql1 = 'DELETE FROM parametro WHERE id NOT IN (:id) AND doc = :doc';
+            $p = $_POST['parametro'];
+            $stm1 = $conn->prepare($sql1);
+            $stm1->bindParam(':id', join(',', $p));
+        }
+        else
+        {
+            $sql1 = 'DELETE FROM parametro WHERE doc = :doc';
+            $stm1 = $conn->prepare($sql1);
+        }
+
+        $stm1->bindParam(':doc', $_POST['id']);
+
+        $stm1->execute();
     }
     catch(PDOException $e)
     {
