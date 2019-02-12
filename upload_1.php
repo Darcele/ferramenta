@@ -4,7 +4,6 @@
     
     // Pasta onde o arquivo vai ser salvo
     $_UP['pasta'] = 'upload';
-
     // Tamanho máximo do arquivo (em Bytes)
     $_UP['tamanho'] = 1024 * 1024 * 2; // 2Mbyte
  
@@ -45,14 +44,12 @@
     }
  
     //Inserir arquivo no zip
-
     $za = new ZipArchive;
     $za->open($_UP['pasta'] . '/arquivos_zip.zip', ZipArchive::CREATE);
     $za->addFile(realpath($_UP['pasta'] . '/' . $nome_final), $nome_final);
     $za->close();
-
+        
     // Parametros de conexao com o banco de dados
-
     $servername = "localhost";
     $username = "cefet";
     $password = "cefet123";
@@ -60,63 +57,149 @@
     try 
     {
         $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
+        //echo 'ok';
     }
     catch(PDOException $e)
     {
         echo "Connection failed: " . $e->getMessage();
+        echo 'nao';
         exit;
     } 
     
+    //echo $_FILE['doc']['name'];
     // Insere o documento no banco e dados
-
     $sql = "INSERT INTO documento(caminho, nome) VALUES(:caminho, :nome)";
     $stmt = $conn->prepare( $sql );
     $caminho = realpath($_UP['pasta'] . '/' . $nome_final);
     $stmt->bindParam(':caminho', $caminho);
     $stmt->bindParam(':nome', $nome_final);
     $result = $stmt->execute();
-
     if($result == FALSE)
     {
         echo 'NO';    
         var_dump( $stmt->errorInfo() );
         exit;    
     }
-
     $insertid = $conn->lastInsertId();
+	
+	//Antes de obter os parametros do arquivo precisa saber o tipo dele.
+	//A variavel $caminho possui o camimho completo para o arquivo.
 
-    // Obtem os parametros do arquivo
+	//Inicializa a variavel $extension como txt
+	$extension = "txt";
+		
+	//Define o tempo máximo para esperar.
+	set_time_limit(7200);
 
-    $fileContents = file_get_contents($caminho);
-
-    if ($fileContents === false) 
-    {
-        echo 'Erro ao ler o arquivo!';
+	//Inicializa as variaveis para armazenar os bytes
+	$byte1 = "";
+	$byte2 = "";
+	$byte3 = "";
+	$byte4 = "";
+	
+	//Verifica se o arquivo existe
+	if(file_exists($caminho) and !empty($caminho))
+	{
+		//Abre o arquivo em modo leitura binário (rb)
+		$fp = fopen($caminho, "rb");
+		//Le o primeiro byte
+		$byte1 = sprintf("%02X",ord(fgetc($fp)));echo $byte1;
+		//Le o segundo byte
+		$byte2 = sprintf("%02X",ord(fgetc($fp)));echo $byte2;
+		//Le o terceiro byte
+		$byte3 = sprintf("%02X",ord(fgetc($fp)));//echo $byte3;
+		//Le o quarto byte
+		$byte4 = sprintf("%02X",ord(fgetc($fp)));//echo $byte4;
+		//Fecha o arquivo
+		fclose($fp);
     }
-    $parametros = array();
-    $palavras = str_word_count($fileContents,1, "{}");
-    foreach($palavras as $palavra)
+    echo $byte1;
+
+    echo $byte2;
+	//Agora testa os bytes
+	if ($byte1=='50' && $byte2=='4B')
+	{
+		echo "Arquivo binario";
+		$extension = "bin";
+    }
+    
+    echo $extension;
+	
+	//Agora continua com a extração dos parâmetros para os casos de ser binário ou texto
+	
+    if($extension == "txt")
     {
-        if(preg_match('/{{([^}]*)}}/', $palavra, $matches))
+		$fileContents = file_get_contents($caminho);
+		if ($fileContents === false) 
+		{
+			echo 'Erro ao ler o arquivo!';
+		}
+		$parametros = array();
+		$palavras = str_word_count($fileContents,1, "{}<>");
+		echo 'ok 127';
+        foreach($palavras as $palavra)
         {
-            array_unshift($parametros, $matches[1]);
+            if(preg_match('/{{([^}]*)}}/', $palavra, $matches))
+            {
+                echo 'entrou';
+                array_unshift($parametros, $matches[1]);
+                print_r($matches);
+            }
         }
     }
+    
+    if($extension == "bin")
+    {                
+        $temp = tempnam('.', 'TMP_');
+        copy($caminho, $temp);
+        
+        $zip = new ZipArchive;
+        $dataFile = "content.xml";
 
+        //echo $caminho;
 
+        if ($zip->open($temp)) 
+        {
+            $fileContents = $zip->getFromName($dataFile);
+            //echo '<br>';
+
+            //$zip->deleteName($dataFile);
+            $palavras = str_word_count($fileContents,1, "{}<>");
+            
+            foreach($palavras as $palavra)
+            {
+                //echo $palavra . '<br>';
+                //print_r ($palavras);
+                echo $palavra;
+                $parametros = array();
+            if(preg_match('/{(<[^>]+>)*({([^}]*)})(<[^>]+>)*}/', $palavra, $matches))
+                {
+                    echo 'entrou';
+                    print_r($matches);
+                    //print_r ($palavras);
+                    array_unshift($parametros, $matches[3]);
+
+                }
+            }
+
+            $zip->close();
+            echo 'ok 117';
+        } 
+        else 
+        {
+            echo 'failed';
+        }
+    }
     $sql1 = "INSERT INTO parametro(nome, doc) VALUES(:nome, :id)";
     $stmt1 = $conn->prepare( $sql1 );
 
+    //print_r ($insertid);
     
     foreach($parametros as $item)
     {
         $stmt1->bindParam(':id', $insertid);
         $stmt1->bindParam(':nome', $item);
         $stmt1->execute();
-    }
-
-    header("Location: criar.php?id=$insertid");
-
+    }  
+    //header("Location: criar.php?id=$insertid");
 ?>
-
-

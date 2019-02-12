@@ -17,14 +17,8 @@
     
         $sql1 = 'SELECT COUNT(id) AS cont FROM parametro WHERE doc ='.$_POST['id'];
 
-        $cont; 
-
-        while ($linha = $consulta->fetch($sql1)) 
-        {
-          $cont = $linha['cont'];
-          echo $descricao;
-        }
-
+        //$cont; 
+        
         $sql2 = 'DELETE FROM parametro WHERE doc=:doc'; 
         
         if (isset($_POST['parametro']))
@@ -32,7 +26,7 @@
             $sql2 = 'DELETE FROM parametro WHERE id NOT IN (:id) AND doc = :doc';
             $p = $_POST['parametro'];
             $stm2 = $conn->prepare($sql1);
-            $stm2->bindParam(':id', $p, PDO::PARAM_INT);
+            $stm2->bindParam(':id', join(',', $p));
         }
         else
         {
@@ -41,7 +35,6 @@
         }
         $stm2->bindParam(':doc', $_POST['id']);
         $stm2->execute();
-        
         
         if($conn->query($sql1) == 0)
         {
@@ -53,7 +46,6 @@
             echo "APAGOU";
 
         }
-    
        
     }
     catch(PDOException $e)
@@ -61,5 +53,5 @@
         exit ("Error: " . $e->getMessage());
     }
     
-  //  header('Location:lista.php');
-?>
+    //header('Location:lista.php');
+?

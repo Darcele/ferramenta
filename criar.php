@@ -1,5 +1,4 @@
 <?php
-
     $servername = "localhost";
     $username = "cefet";
     $password = "cefet123";
@@ -10,19 +9,20 @@
         $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
         $conn->exec('SET NAMES utf8');
 
-
         $sql = 'SELECT documento.nome AS descricao , parametro.nome AS parametro, 
         parametro.id AS id_param FROM parametro INNER JOIN documento 
         ON parametro.doc = documento.id WHERE documento.id =' . $_GET['id'];
+
         $consulta = $conn->query($sql);
 
-
+        //echo $sql;
     }
     catch(PDOException $e)
     {
         exit ("Error: " . $e->getMessage());
     }
   
+
 ?>
 
 <!DOCTYPE html>
@@ -50,17 +50,19 @@
     <h3>Após alterar as informações aperte salvar para salvá-las ou cancelar para desfazê-las.</h3></br>
   
       <h2>Parâmetros</h2>
-      <h4>Mantenha marcado somente oque deseja considerar.<h4>
+      <h4>Mantenha marcado somente o que deseja considerar.<h4>
 
       <form action="novo.php" method="post">
       
       <?php
     
+      //echo 'TESTE' . $_GET[$nome_final] .'E'. $_GET[$parametros];
       while ($linha = $consulta->fetch()) 
       {
         $descricao = $linha['descricao'];
         $id_param = $linha['id_param'];
         $parametro = $linha['parametro'];
+        echo $descricao;
     
       ?>
       
@@ -70,8 +72,7 @@
         <?php 
       }
     ?>
-      
-      <br>
+       <br>
       <h2>Descrição</h2>
       <h4> Insira a descrição do documento.</h4>
         <div class="form-group">
@@ -80,7 +81,7 @@
       <br>
         <input type="hidden" name="id" value="<?=$_GET['id']?>">
         <input type="submit" value="Salvar" class="btn btn-info"/>
-        <a href="lista.php"><button type="button" class="btn btn-info">Cancelar</button></a>
+        <a href="excluir.php?id=<?=$_GET['id']?>"><button type="button" class="btn btn-info">Cancelar</button></a>
     </div>  
     </form>
   </body>
