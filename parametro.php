@@ -1,4 +1,9 @@
-<?php
+<?php 
+
+/*
+Identificar os parâmetros no documento que sofreu upload, identificado pelo $_GET['id];
+Inserir na tabela parametro 
+*/
 
     $servername = "localhost";
     $username = "cefet";
@@ -11,10 +16,9 @@
         $conn->exec('SET NAMES utf8');
 
         $sql1 = 'INSERT INTO parametro(nome, doc) VALUES (:nome, :id)';
-        $stm->bindParam(':nome', $_GET['nome']);
-        $stm->bindParam(':id', $_GET['id']);
+        $stm->bindParam(':doc', $_GET['id']);
         $stm->execute();
-    
+  
     }
     catch(PDOException $e)
     {
@@ -22,3 +26,19 @@
     }
   //header('Location:criar.php');
 ?>
+
+public function verParametro($arquivo){       
+        $_UP['pasta'] = 'upload';
+        $parametros = array();
+        $zip = new ZipArchive;
+        $zip->open($_UP['pasta'] . '/arquivos_zip.zip');
+        $fileContents = $zip->getFromName($arquivo);
+        $palavras = str_word_count($fileContents,1, "{}");
+        foreach($palavras as $palavra){
+            if(preg_match('/{{([^}]*)}}/', $palavra, $matches)){
+                array_unshift($parametros, $matches[1]);
+            }
+        }
+        $zip->close();
+        return $parametros;
+    }

@@ -1,65 +1,34 @@
 <?php
-    $servername = "localhost";
-    $username = "cefet";
-    $password = "cefet123";
-        
-    // Faz a conexao com o banco de dados
-        
-    try {
-        $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
-        $conn->exec('SET NAMES utf8');
-        $sql = 'UPDATE documento SET nome = :nome WHERE id = :id';
+    include "./config/config.php";
 
-        $stm = $conn->prepare($sql);
-        $stm->bindParam(':nome', $_POST['descricao']);
-        $stm->bindParam(':id', $_POST['id']);
-        $stm->execute();
-    
-        $sql1 = 'SELECT COUNT(id) AS cont FROM parametro WHERE doc ='.$_POST['id'];
+    $za = new ZipArchive;
+    $za->open($upload_folder . '/'.$upload_zip, ZipArchive::CREATE);
+    $za->addFile(realpath($_POST['caminho']), $_POST['nome_final']);
+    $za->close();     
 
-        $cont; 
-
-        while ($linha = $consulta->fetch($sql1)) 
-        {
-          $cont = $linha['cont'];
-          echo $descricao;
-        }
-
-        $sql2 = 'DELETE FROM parametro WHERE doc=:doc'; 
-        
-        if (isset($_POST['parametro']))
-        {
-            $sql2 = 'DELETE FROM parametro WHERE id NOT IN (:id) AND doc = :doc';
-            $p = $_POST['parametro'];
-            $stm2 = $conn->prepare($sql1);
-            $stm2->bindParam(':id', $p, PDO::PARAM_INT);
-        }
-        else
-        {
-            $sql2 = 'DELETE FROM parametro WHERE doc = :doc';
-            $stm2 = $conn->prepare($sql1);
-        }
-        $stm2->bindParam(':doc', $_POST['id']);
-        $stm2->execute();
-        
-        
-        if($conn->query($sql1) == 0)
-        {
-            $sql3 = 'DELETE FROM documento WHERE doc=:doc';
-            $stm3 = $conn->prepare($sql3);
-
-            $stm3->execute();
-
-            echo "APAGOU";
-
-        }
-    
-       
-    }
-    catch(PDOException $e)
+    $sql = "INSERT INTO documento(caminho, nome) VALUES(:caminho, :nome)";
+    $stmt = $conn->prepare( $sql );
+    $stmt->bindParam(':caminho', realpath($_POST['caminho']));
+    $stmt->bindParam(':nome', $_POST['nome_final']);
+    $result = $stmt->execute();
+    if($result == FALSE)
     {
-        exit ("Error: " . $e->getMessage());
+        echo 'NO';    
+        var_dump( $stmt->errorInfo() );
+        exit;    
     }
+
+    $insertid = $conn->lastInsertId();
     
-  //  header('Location:lista.php');
+    $sql1 = "INSERT INTO parametro(nome, doc) VALUES(:nome, :id)";
+    $stmt1 = $conn->prepare( $sql1 );
+    
+    foreach($_POST['parametros'] as $item)
+    {
+        $stmt1->bindParam(':id', $insertid);
+        $stmt1->bindParam(':nome', $item);
+        $stmt1->execute();
+    }
+
+  header('Location:lista.php');
 ?>

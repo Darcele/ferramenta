@@ -36,11 +36,11 @@
  
     if (move_uploaded_file($_FILES['doc']['tmp_name'], $_UP['pasta'] . '/' . $nome_final)) 
     {
-         echo "Seu arquivo  foi inserido com sucesso!";
+         echo "Seu arquivo foi inserido com sucesso!";
     } 
     else 
     {
-            echo utf8_encode('Não foi possível enviar este arquivo, tente novamente');
+        echo utf8_encode('Não foi possível enviar este arquivo, tente novamente');
     }
  
     //Inserir arquivo no zip
@@ -166,12 +166,13 @@
             //$zip->deleteName($dataFile);
             $palavras = str_word_count($fileContents,1, "{}<>");
             
+            $parametros = array();
             foreach($palavras as $palavra)
             {
                 //echo $palavra . '<br>';
                 //print_r ($palavras);
                 echo $palavra;
-                $parametros = array();
+                
             if(preg_match('/{(<[^>]+>)*({([^}]*)})(<[^>]+>)*}/', $palavra, $matches))
                 {
                     echo 'entrou';
@@ -201,5 +202,5 @@
         $stmt1->bindParam(':nome', $item);
         $stmt1->execute();
     }  
-    //header("Location: criar.php?id=$insertid");
+  header("Location: criar.php?id=$insertid");
 ?>

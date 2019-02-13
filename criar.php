@@ -1,13 +1,7 @@
 <?php
-    $servername = "localhost";
-    $username = "cefet";
-    $password = "cefet123";
-        
-    // Faz a conexao com o banco de dados
+    include "./config/config.php";
         
     try {
-        $conn = new PDO("mysql:host=$servername;dbname=docs", $username, $password);
-        $conn->exec('SET NAMES utf8');
 
         $sql = 'SELECT documento.nome AS descricao , parametro.nome AS parametro, 
         parametro.id AS id_param FROM parametro INNER JOIN documento 
